@@ -1,6 +1,25 @@
+# 巨量資料分析 Howework 1
+### 問題回答
+
+1. 哪些屬性對於惡意程式分類有效？
+    * 採用 Random Forest 的方法，得到各 Features 的影響權重值——importances，並根據 importances 中分數越高的越代表較有相關性。
+2. 哪些屬性對於惡意程式分類無效？
+    * 經過 Random Forest 後算出來 importance 較低的 Feature，其影響力也應該較低。
+3. 用什麼方法可以幫助你決定上述的結論？
+    * 本作業採用 Random Forest 的方法來幫我們解決這項問題。
+4. 透過Python哪些套件以及方法可以幫助你完成上面的工作？ 
+    * 本次實驗採用的套件有:
+        * Pandas: 資料載入。
+        * Sklearn: 運用 Random Forest 演算法進行 Feature Selection.
+        * matplotlib: 幫助畫出桶型圖。
+5. 課程迄今有無建議？(老師教學風趣或良好就不用再提囉)
+    * 老師迄今教學的內容風趣且豐富，但對於沒有學過 Data Mining 的同學而言，內容似乎有些過深，有些東西可能沒聽過或沒接觸過，聽起來有些吃力。
 
 
-```
+### 實驗結果
+
+#### In[1] = 
+```python
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,11 +29,6 @@ from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.feature_selection import SelectFromModel
 
 data = pd.read_csv("./LargeTrain.csv")
-```
-
-
-```
-names = data.columns
 
 X = np.array(data.ix[:,0:1804])
 y = np.array(data.ix[:,1804:1805]).ravel()
@@ -40,6 +54,7 @@ plt.title("Feature importances")
 plt.bar(range(10), importances[indices[0:10]]) #show top 10 more influential features
 plt.show()
 ```
+#### Out[1] =
 
     Feature ranking:
     1. feature 1286 (0.029169)
@@ -58,8 +73,8 @@ plt.show()
 ![png](output_1_1.png)
 
 
-
-```
+#### In[2] =
+```python
 from sklearn.metrics import confusion_matrix
 X_new = X[:,indices[0:10]]
 forest_new = RandomForestClassifier(n_estimators=10)
@@ -70,7 +85,7 @@ cnf_matrix = confusion_matrix(y, y_pred)
 
 print cnf_matrix
 ```
-
+#### Out[2] =
     [[1537    1    0    0    1    1    0    1    0]
      [   0 2478    0    0    0    0    0    0    0]
      [   0    0 2942    0    0    0    0    0    0]
@@ -80,9 +95,3 @@ print cnf_matrix
      [   0    0    0    0    0    2  396    0    0]
      [   4    0    1    1    0    1    0 1220    1]
      [   4    1    0    0    0    2    1    0 1005]]
-
-
-
-```
-
-```
